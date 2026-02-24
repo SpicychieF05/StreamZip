@@ -1,4 +1,5 @@
 import ytdl from '@distube/ytdl-core';
+import fs from 'fs';
 import { AppError } from '../utils/errorHandler.js';
 
 class YouTubeService {
@@ -41,13 +42,11 @@ class YouTubeService {
 
     async downloadVideo(url, outputPath, quality = '720p') {
         try {
-            const format = ytdl.chooseFormat(await ytdl.getInfo(url), {
-                quality: 'highestvideo',
-                filter: 'videoandaudio'
-            });
-
             return new Promise((resolve, reject) => {
-                const stream = ytdl(url, { format });
+                const stream = ytdl(url, {
+                    quality: 'highestvideo',
+                    filter: 'videoandaudio'
+                });
                 const writeStream = require('fs').createWriteStream(outputPath);
 
                 stream.pipe(writeStream);
