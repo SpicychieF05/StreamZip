@@ -1,33 +1,47 @@
-import ytdl from '@distube/ytdl-core';
+import YTDlpWrap from 'yt-dlp-wrap';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { AppError } from '../utils/errorHandler.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 class YouTubeService {
+    constructor() {
+        // Initialize yt-dlp wrapper with the downloaded binary path
+        const ytDlpPath = path.join(__dirname, '../../bin/yt-dlp.exe');
+        this.ytDlp = new YTDlpWrap.default(ytDlpPath);
+    }
+
     async getVideoInfo(url) {
         try {
-            if (!ytdl.validateURL(url)) {
+            // Basic URL validation
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+            if (!youtubeRegex.test(url)) {
                 throw new AppError('Invalid YouTube URL', 400);
             }
 
-            const info = await ytdl.getInfo(url);
-            const videoDetails = info.videoDetails;
+            // Get video info using yt-dlp
+            const info = await this.ytDlp.getVideoInfo(url);
 
             return {
-                id: videoDetails.videoId,
-                title: videoDetails.title,
-                duration: parseInt(videoDetails.lengthSeconds),
-                thumbnail: videoDetails.thumbnails[videoDetails.thumbnails.length - 1]?.url || '',
-                author: videoDetails.author.name,
-                viewCount: videoDetails.viewCount
+                id: info.id,
+                title: info.title,
+                duration: parseInt(info.duration || 0),
+                thumbnail: info.thumbnail || info.thumbnails?.[0]?.url || '',
+                author: info.uploader || info.channel || 'Unknown',
+                viewCount: info.view_count || 0
             };
         } catch (error) {
-            if (error.statusCode === 410) {
+            console.error('getVideoInfo error:', error);
+            if (error.message && error.message.includes('Video unavailable')) {
                 throw new AppError('Video not available', 404);
             }
-            if (error.message.includes('private')) {
+            if (error.message && error.message.includes('Private video')) {
                 throw new AppError('Private video cannot be accessed', 403);
             }
-            if (error.message.includes('age')) {
+            if (error.message && error.message.includes('age')) {
                 throw new AppError('Age-restricted video cannot be downloaded', 403);
             }
             throw new AppError(error.message || 'Failed to fetch video info', 500);
@@ -35,47 +49,44 @@ class YouTubeService {
     }
 
     async getPlaylistInfo(playlistId) {
-        // Note: ytdl-core doesn't support playlists directly
-        // For MVP, we'll use a simplified approach or need yt-dlp
-        throw new AppError('Playlist support requires yt-dlp installation', 501);
+        // yt-dlp supports playlists
+        throw new AppError('Playlist support coming soon', 501);
     }
 
     async downloadVideo(url, outputPath, quality = '720p') {
         try {
-            return new Promise((resolve, reject) => {
-                const stream = ytdl(url, {
-                    quality: 'highestvideo',
-                    filter: 'videoandaudio'
-                });
-                const writeStream = fs.createWriteStream(outputPath);
+            // Use yt-dlp to download video with audio
+            await this.ytDlp.execPromise([
+                url,
+                '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+                '-o', outputPath,
+                '--no-playlist',
+                '--no-warnings',
+                '--no-check-certificate'
+            ]);
 
-                stream.pipe(writeStream);
-
-                stream.on('error', reject);
-                writeStream.on('error', reject);
-                writeStream.on('finish', () => resolve(outputPath));
-            });
+            return outputPath;
         } catch (error) {
+            console.error('downloadVideo error:', error);
             throw new AppError('Failed to download video: ' + error.message, 500);
         }
     }
 
     async downloadAudio(url, outputPath) {
         try {
-            return new Promise((resolve, reject) => {
-                const stream = ytdl(url, {
-                    quality: 'highestaudio',
-                    filter: 'audioonly'
-                });
-                const writeStream = fs.createWriteStream(outputPath);
+            // Use yt-dlp to download audio only
+            await this.ytDlp.execPromise([
+                url,
+                '-f', 'bestaudio[ext=m4a]/bestaudio',
+                '-o', outputPath,
+                '--no-playlist',
+                '--no-warnings',
+                '--no-check-certificate'
+            ]);
 
-                stream.pipe(writeStream);
-
-                stream.on('error', reject);
-                writeStream.on('error', reject);
-                writeStream.on('finish', () => resolve(outputPath));
-            });
+            return outputPath;
         } catch (error) {
+            console.error('downloadAudio error:', error);
             throw new AppError('Failed to download audio: ' + error.message, 500);
         }
     }

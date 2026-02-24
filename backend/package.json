@@ -21,7 +21,8 @@
     "ioredis": "^5.3.2",
     "next": "16.1.6",
     "node-cache": "^5.1.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "yt-dlp-wrap": "^2.3.12"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
