@@ -47,7 +47,7 @@ class YouTubeService {
                     quality: 'highestvideo',
                     filter: 'videoandaudio'
                 });
-                const writeStream = require('fs').createWriteStream(outputPath);
+                const writeStream = fs.createWriteStream(outputPath);
 
                 stream.pipe(writeStream);
 
@@ -67,7 +67,7 @@ class YouTubeService {
                     quality: 'highestaudio',
                     filter: 'audioonly'
                 });
-                const writeStream = require('fs').createWriteStream(outputPath);
+                const writeStream = fs.createWriteStream(outputPath);
 
                 stream.pipe(writeStream);
 
