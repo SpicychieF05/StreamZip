@@ -56,9 +56,10 @@ class YouTubeService {
     async downloadVideo(url, outputPath, quality = '720p') {
         try {
             // Use yt-dlp to download video with audio
+            // Prefer pre-merged formats to avoid needing FFmpeg
             await this.ytDlp.execPromise([
                 url,
-                '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+                '-f', 'best[ext=mp4]/best',
                 '-o', outputPath,
                 '--no-playlist',
                 '--no-warnings',
