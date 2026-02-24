@@ -1,0 +1,163 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-white);
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 40px;
+}
+
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-red);
+    margin-bottom: 8px;
+}
+
+.tagline {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Input Section */
+.inputSection {
+    margin-bottom: 24px;
+}
+
+.inputWrapper {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.input {
+    flex: 1;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: var(--primary-red);
+}
+
+.pasteButton {
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--primary-white);
+    color: var(--primary-red);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.pasteButton:hover {
+    background-color: #FFF5F5;
+}
+
+/* Buttons */
+.primaryButton {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+    border-radius: 8px;
+    min-height: 56px;
+}
+
+.primaryButton:hover:not(:disabled) {
+    background-color: #CC0000;
+}
+
+.secondaryButton {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-white);
+    color: var(--primary-red);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    min-height: 56px;
+    margin-top: 16px;
+}
+
+.secondaryButton:hover {
+    background-color: #FFF5F5;
+}
+
+/* Error Message */
+.error {
+    padding: 16px;
+    margin-bottom: 24px;
+    background-color: #FFF5F5;
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+}
+
+.error p {
+    color: var(--primary-red);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Footer */
+.footer {
+    padding: 24px;
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+}
+
+.footer p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 600px;
+        padding: 32px;
+    }
+
+    .logo {
+        font-size: 36px;
+    }
+
+    .tagline {
+        font-size: 16px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 1023px) {
+    .container {
+        max-width: 500px;
+        padding: 24px;
+    }
+}

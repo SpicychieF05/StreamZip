@@ -1,0 +1,463 @@
+Product Requirements Document (PRD)
+
+Product Name: StreamZip (working title)
+Document Owner: BA/PM
+Version: 1.0
+Date: 24 Feb 2026
+
+1. Product Overview
+
+StreamZip is a web-based tool that allows users to download video or audio from a provided YouTube URL (single video or playlist) with strict limits and mobile-first optimization. The platform prioritizes fast, simple smartphone usage while remaining functional on desktop.
+
+Primary Goal:
+Provide a fast, clean, mobile-first experience for downloading permitted media content in MP4 or audio format.
+
+Key Differentiator:
+
+Mobile-first UX
+
+Playlist ZIP support
+
+Real-time job progress
+
+Lightweight public MVP (<100 users/day)
+
+2. Objectives & Success Metrics
+Business Objectives
+
+Launch stable MVP
+
+Support public access
+
+Maintain low infrastructure cost
+
+Prevent abuse
+
+Success Metrics (KPIs)
+
+Successful download rate ≥ 95%
+
+Average job completion time < 60 seconds (single video)
+
+Playlist ZIP success rate ≥ 90%
+
+Mobile bounce rate < 40%
+
+Error rate < 5%
+
+3. Target Users
+Primary Users
+
+Students
+
+Mobile-first users
+
+Users needing quick offline access
+
+User Characteristics
+
+Mostly smartphone users
+
+Low patience for complex UI
+
+Prefer one-click workflows
+
+Moderate internet speeds
+
+4. Scope
+In Scope (MVP)
+Video
+
+Single video download (MP4)
+
+Playlist preview
+
+Per-video download from playlist
+
+Playlist ZIP download (max 8 videos)
+
+Audio
+
+Single audio download
+
+Playlist audio ZIP (max 15 videos)
+
+Real-time extraction
+
+Platform
+
+Mobile-first responsive UI
+
+Desktop supported
+
+Job progress tracking
+
+Rate limiting
+
+Out of Scope (Phase 1)
+
+User accounts
+
+Download history
+
+Multi-platform support
+
+Background cloud storage
+
+Bulk playlist > limits
+
+Browser extension
+
+5. Functional Requirements
+5.1 URL Analysis
+
+FR-1 User can paste a YouTube URL.
+FR-2 System detects video vs playlist.
+FR-3 System fetches metadata (title, thumbnail, duration).
+FR-4 Invalid URLs show clear error.
+
+5.2 Single Video Download
+
+FR-5 User clicks "Download Video".
+FR-6 System creates background job.
+FR-7 Output format: MP4.
+FR-8 Default quality: 720p.
+FR-9 User sees progress indicator.
+FR-10 User receives download link when ready.
+
+5.3 Playlist Video Download
+
+FR-11 Playlist videos are displayed in list.
+FR-12 Each video has its own download button.
+FR-13 “Download Playlist (ZIP)” available at bottom.
+FR-14 Hard limit: max 8 videos for video ZIP.
+FR-15 If playlist > 8, show warning and restrict.
+
+5.4 Single Audio Download
+
+FR-16 User clicks "Download Audio".
+FR-17 System prefers M4A direct stream.
+FR-18 If needed, system converts to MP3.
+FR-19 User sees progress.
+
+5.5 Playlist Audio ZIP
+
+FR-20 “Download Audio Playlist (ZIP)” available.
+FR-21 Hard limit: max 15 videos.
+FR-22 Sequential processing in worker.
+FR-23 ZIP streamed to user.
+
+5.6 Job Management
+
+FR-24 Each job has unique ID.
+FR-25 User can see job status:
+
+queued
+
+processing
+
+completed
+
+failed
+
+FR-26 Progress percentage shown when possible.
+FR-27 Failed jobs show retry option.
+
+5.7 Rate Limiting & Protection
+
+FR-28 Per-IP download limit enforced.
+FR-29 Playlist ZIP limited per hour.
+FR-30 Bot protection enabled.
+FR-31 Unsupported URLs blocked.
+
+6. Non-Functional Requirements
+Performance
+
+Page load < 2 seconds (mobile)
+
+Analyze response < 5 seconds
+
+Support 100 users/day
+
+Queue concurrency: controlled
+
+Reliability
+
+Temp files auto-deleted
+
+Worker timeout protection
+
+Graceful error handling
+
+Security
+
+Input validation
+
+URL whitelist
+
+File size limits
+
+Rate limiting
+
+CAPTCHA protection
+
+Scalability
+
+Queue-based architecture
+
+Stateless API
+
+Worker autoscaling ready
+
+7. UX/UI Requirements
+7.1 Design Principles
+
+Mobile-first (primary)
+
+Thumb-friendly
+
+Minimal steps
+
+Fast feedback
+
+Clean YouTube-like theme
+
+High contrast
+
+7.2 Color System (MANDATORY)
+
+Primary Red: #FF0000
+Primary White: #FFFFFF
+Text Dark: #0F0F0F
+Border Light: #E5E5E5
+
+Usage Rules
+
+Background: white
+
+Primary buttons: red
+
+Secondary buttons: white with red border
+
+Progress bar: red
+
+Error text: red
+
+No additional accent colors in MVP.
+
+7.3 Typography
+
+Font: Inter / Roboto
+
+Base size (mobile): 16px
+
+Button text: 14–16px
+
+Large titles: 18–22px
+
+8. Responsive Design Requirements
+Mobile (PRIMARY)
+
+Breakpoint: ≤ 480px
+
+Requirements:
+
+Single column layout
+
+Max width: 420px
+
+Sticky bottom action bar
+
+Large tap targets (≥48px)
+
+Reduced padding
+
+No side navigation
+
+Tablet
+
+Centered layout
+
+Slightly larger cards
+
+Same flow as mobile
+
+Desktop (SECONDARY)
+
+Breakpoint: ≥ 1024px
+
+Requirements:
+
+Centered container
+
+Max width: 900px
+
+Two-column playlist allowed
+
+Same interaction model
+
+No feature differences
+
+9. Key Screens
+Screen 1 — Home
+
+Elements
+
+Logo
+
+URL input
+
+Paste button
+
+Analyze button
+
+Mobile priority: very high
+
+Screen 2 — Video Preview
+
+Elements
+
+Thumbnail
+
+Title
+
+Duration
+
+Download Video
+
+Download Audio
+
+Screen 3 — Playlist View
+
+Elements
+
+Scrollable video list
+
+Per-item download buttons
+
+Bottom sticky:
+
+Download Playlist (ZIP)
+
+Download Audio ZIP
+
+Screen 4 — Job Progress
+
+Elements
+
+Progress bar
+
+Status text
+
+Spinner
+
+Cancel (optional)
+
+Screen 5 — Download Ready
+
+Elements
+
+Success icon
+
+File size
+
+Download button
+
+New download button
+
+10. Error Handling
+
+System must handle:
+
+Invalid URL
+
+Private video
+
+Age-restricted video
+
+Playlist too long
+
+Download failure
+
+Network failure
+
+Queue overload
+
+All errors must show human-readable messages.
+
+11. Analytics Requirements
+
+Track:
+
+Analyze attempts
+
+Successful downloads
+
+Failed downloads
+
+Playlist ZIP usage
+
+Device type (mobile vs desktop)
+
+Average processing time
+
+Tool: Google Analytics or Plausible.
+
+12. MVP Acceptance Criteria
+
+MVP is complete when:
+
+Single video download works
+
+Single audio download works
+
+Playlist preview works
+
+Playlist ZIP works within limits
+
+Mobile UX smooth
+
+Rate limiting active
+
+Temp cleanup working
+
+Error handling stable
+
+13. Future Roadmap (Post-MVP)
+
+User accounts
+
+Download history
+
+Background downloads
+
+More platforms
+
+Quality selector UI
+
+Queue position display
+
+Dark mode
+
+Native Android wrapper
+
+14. Risks & Mitigation
+Technical Risk
+
+yt-dlp breaks → keep auto-update plan
+
+CPU spikes → queue limits
+
+Disk overflow → auto cleanup
+
+Platform Risk
+
+Hosting restrictions → separate worker host
+
+Abuse/bots → rate limiting + CAPTCHA
+
+Product Risk
+
+Slow playlist → sequential safe processing
+
+Mobile UX issues → strict mobile-first testing

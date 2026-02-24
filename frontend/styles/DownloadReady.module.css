@@ -1,0 +1,78 @@
+.ready {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.filename {
+    font-size: 14px;
+    color: #666;
+    word-break: break-all;
+    margin-bottom: 32px;
+    padding: 12px;
+    background-color: #F9F9F9;
+    border-radius: 8px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.downloadButton {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+    border-radius: 8px;
+    min-height: 56px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.downloadButton:hover {
+    background-color: #CC0000;
+    text-decoration: none;
+}
+
+.newDownloadButton {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-white);
+    color: var(--primary-red);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    min-height: 56px;
+    transition: background-color 0.2s;
+}
+
+.newDownloadButton:hover {
+    background-color: #FFF5F5;
+}
+
+.note {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
